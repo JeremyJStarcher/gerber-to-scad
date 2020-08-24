@@ -20,4 +20,5 @@ async function  main() {
   console.log(`Output file written to: ${outputFileName}`)
 }
 
+debugger;
 main();
