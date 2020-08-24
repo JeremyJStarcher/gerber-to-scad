@@ -78,5 +78,10 @@
     "test": "karma start",
     "lint": "eslint -c .eslintrc.js --ext .ts src"
   },
-  "version": "0.0.1"
+  "version": "0.0.1",
+  "dependencies": {
+    "gerber-parser": "^4.2.1",
+    "gerber-to-svg": "^4.2.1",
+    "jszip": "^3.5.0"
+  }
 }
