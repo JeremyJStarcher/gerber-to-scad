@@ -1,0 +1,5 @@
+#!/bin/bash
+
+cp  ~/Dropbox/KiCad/arduino-isp/gerber/* .
+rm *.zip
+zip  arduino-as-isp.zip *

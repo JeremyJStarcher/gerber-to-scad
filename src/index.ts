@@ -5,4 +5,5 @@ console.log('See this in your browser console: Typescript Webpack Starter Launch
 const myLibrary = new MyLibrary();
 const result = myLibrary.executeDependency();
 
+debugger;
 console.log(`A random number ${result}`);
