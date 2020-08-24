@@ -1,4 +1,3 @@
 node_modules/
 dist
-tests
-src/gerber-to-scad/z/
+tests/coverage/
