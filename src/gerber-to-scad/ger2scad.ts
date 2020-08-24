@@ -92,7 +92,7 @@ export interface GerberContainer {
  *
  */
 export async function unzipGerbers(
-  data: Buffer
+  data: Buffer | ArrayBuffer
 ): Promise<readonly GerberContainer[]> {
   const zip = new jszip();
 

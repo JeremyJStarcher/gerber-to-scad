@@ -6,6 +6,36 @@
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
+  <style>
+    :root {
+      --main-bg-color: #004f14;
+      --main-text-color: #d0db8c;
+      --main-accent1-color: #cbedb3;
+    }
+
+    body {
+      background-image: url("./assets/computer-circuit-board-16.jpg");
+    }
+
+    section {
+      color: var(--main-text-color);
+      background-color: var(--main-bg-color);
+      max-width: 800px;
+      border: 2px solid var(--main-accent1-color);
+      margin: auto;
+      padding-left: 1em;
+      padding-right: 1em;
+    }
+
+    /*
+    input[type="file"],
+    button {
+      color: var(--main-text-color);
+      background-color: var(--main-bg-color);
+    }
+    */
+  </style>
+
   <title>
     <%= htmlWebpackPlugin.options.title %>
   </title>
@@ -15,8 +45,32 @@
 </head>
 
 <body>
-  <div> You have successfully started your Typescript application using Webpack. Open your console to see your printed message from the index.ts file </div>
+  <!--
+  <div> You have successfully started your Typescript application using Webpack. Open your console to see your printed
+    message from the index.ts file </div>
   <p>By <a href="https://twitter.com/renaudin_yann">@renaudin_yann</a> </p>
+-->
+
+  <section>
+    <h1><strong>Gerber</strong> to OpenSCAD Converter</h1>
+    <hr>
+    <p>Warning: Experimental!</p>
+    <p>This program is an attempt to convert a Gerber file into an
+      OpenSCAD file that is suitable for 3D printing. Currently,
+      there are several features of Gerber files that are not supported,
+      including its macro abilities.</p>
+    <p>So far, it has only been tested with KiCad Gerber files, as that is
+      the tool that I use.
+    </p>
+
+    <input type="file" id="file-input" />
+    <button id="read-button">Upload ZIP file</button>
+    <hr>
+
+    <button disabled type="botton">View <code>scad</code></button>
+    <button disabled type="botton">Download <code>scad</code></button>
+    
+  </section>
 </body>
 
 </html>
