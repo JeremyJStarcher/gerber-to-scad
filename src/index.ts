@@ -1,5 +1,5 @@
 import { MyLibrary } from './MyLibrary';
-import {LAYER_TYPE, exportToScad, unzipGerbers} from "./gerber-to-scad";
+import {exportToScad, unzipGerbers} from "./gerber-to-scad";
 
 console.log('See this in your browser console: Typescript Webpack Starter Launched');
 
@@ -31,10 +31,9 @@ window.addEventListener("load", () => {
     reader.addEventListener('load', async function (e) {
       // contents of file in variable
       let zipFile = e.target.result;
-      const layers = await unzipGerbers(zipFile as ArrayBuffer);
+      const layers =  await unzipGerbers(zipFile as ArrayBuffer);
 
-      const layersToRender = layers.filter(l => l.layerType !== LAYER_TYPE.IGNORED);
-      const text = await exportToScad(layersToRender);
+      const text = await exportToScad(layers);
 
       const out = document.getElementById("scad-out") as HTMLTextAreaElement;
       out.value = text;

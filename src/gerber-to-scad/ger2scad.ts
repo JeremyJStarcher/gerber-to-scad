@@ -3,6 +3,8 @@ import gerberParser from 'gerber-parser'
 import gerberToSvg from 'gerber-to-svg';
 import whatsThatGerber from "whats-that-gerber";
 import {
+  GerberProps,
+
   // layer types
   TYPE_COPPER, // 'copper'
   TYPE_SOLDERMASK, // 'soldermask'
@@ -84,18 +86,10 @@ export function power(base: number, exponent: number): number {
   return base ** exponent;
 }
 
-export enum LAYER_TYPE {
-  COPPER_TOP,
-  COPPER_BOTTOM,
-  PROFILE,
-  DRILL_HOLES,
-  IGNORED
-}
-
 export interface GerberContainer {
   readonly content: readonly string[];
   readonly name: string;
-  readonly layerType: LAYER_TYPE;
+  readonly layerType: GerberProps;
 }
 
 /**
@@ -141,28 +135,10 @@ export async function unzipGerbers(
   return result;
 }
 
-function identifyFileType(filename: string, content: readonly string[]): LAYER_TYPE {
+function identifyFileType(filename: string, content: readonly string[]): GerberProps {
   const gerberIdObj = whatsThatGerber([filename]);
   const gerberType = gerberIdObj[filename];
-
-  if (gerberType.type === TYPE_COPPER && gerberType.side === SIDE_TOP) {
-    return LAYER_TYPE.COPPER_TOP;
-  }
-
-  if (gerberType.type === TYPE_COPPER && gerberType.side === SIDE_BOTTOM) {
-    return LAYER_TYPE.COPPER_BOTTOM;
-  }
-
-  if (gerberType.type === TYPE_DRILL) {
-    return LAYER_TYPE.COPPER_BOTTOM;
-  }
-
-
-  if (gerberType.type === TYPE_OUTLINE) {
-    return LAYER_TYPE.PROFILE;
-  }
-
-  return LAYER_TYPE.IGNORED;
+  return gerberType;
 }
 
 const getStream = (stream: any) => {
@@ -190,7 +166,7 @@ export async function convertGerberToSvg(
   gerberLayer: GerberContainer
 ): Promise<SvgResultType> {
   const options: gerberToSvg.Options =
-    gerberLayer.layerType === LAYER_TYPE.DRILL_HOLES
+    gerberLayer.layerType.type === TYPE_DRILL
       ? {
         filetype: 'drill',
         places: null /* [2, 4], */,
@@ -219,7 +195,7 @@ export async function convertGerberToSvg(
   });
 }
 
-export async function exportToScad(layers: GerberContainer[]): Promise<string> {
+export async function exportToScad(layers: readonly GerberContainer[]): Promise<string> {
   const header = ['BT = 1.6;', '$fs = 0.5;'];
 
   // tslint:disable-next-line
@@ -228,7 +204,7 @@ export async function exportToScad(layers: GerberContainer[]): Promise<string> {
 
   text = [...text, `module profile() {`];
 
-  const profile = layers.filter(l => l.layerType === LAYER_TYPE.PROFILE);
+  const profile = layers.filter(l => l.layerType.type === TYPE_OUTLINE);
   for (const layer of profile) {
     const svg = await convertGerberToSvg(layer);
     const scad = await convertLayerToScad(svg, layer.name);
@@ -237,7 +213,7 @@ export async function exportToScad(layers: GerberContainer[]): Promise<string> {
   text = [...text, `} // profile()`];
 
   text = [...text, `module top() {`];
-  const top = layers.filter(l => l.layerType === LAYER_TYPE.COPPER_TOP);
+  const top = layers.filter(l => l.layerType.type === TYPE_COPPER && l.layerType.side === SIDE_TOP);
   for (const layer of top) {
     const svg = await convertGerberToSvg(layer);
     const scad = await convertLayerToScad(svg, layer.name);
@@ -248,7 +224,7 @@ export async function exportToScad(layers: GerberContainer[]): Promise<string> {
   if (1) {
     text = [...text, `module drill() {`];
     const drillLayers = layers.filter(
-      l => l.layerType === LAYER_TYPE.DRILL_HOLES
+      l => l.layerType.type === TYPE_DRILL
     );
 
     for (const layer of drillLayers) {
