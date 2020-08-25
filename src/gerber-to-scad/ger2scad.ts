@@ -28,10 +28,13 @@ import {
   OpCommands,
   PlotCommand,
   PlotState,
-  render,
   SetCommands,
   SetToolCommand,
   ToolCommand
+} from "./interface"
+
+import {
+  render,
 } from './render';
 
 export const log = (...p: any) => {
