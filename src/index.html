@@ -27,6 +27,41 @@
       padding-right: 1em;
     }
 
+    a {
+      color: white;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    div.center {
+      text-align: center;
+    }
+
+
+    hr {
+      overflow: visible;
+      /* For IE */
+      height: 30px;
+      border-style: solid;
+      border-color:  var(--main-text-color);
+      border-width: 1px 0 0 0;
+      border-radius: 20px;
+    }
+
+    hr:before {
+      /* Not really supposed to work, but does */
+      display: block;
+      content: "";
+      height: 30px;
+      margin-top: -31px;
+      border-style: solid;
+      border-color: var(--main-text-color);
+      border-width: 0 0 1px 0;
+      border-radius: 20px;
+    }
+
     /*
     input[type="file"],
     button {
@@ -53,6 +88,10 @@
 
   <section>
     <h1><strong>Gerber</strong> to OpenSCAD Converter</h1>
+    <div class="center"><a href="https://github.com/tracespace/tracespace">
+        <i>Based on the powerful TraceSpace parser.</i>
+      </a>
+    </div>
     <hr>
     <p>Warning: Experimental!</p>
     <p>This program is an attempt to convert a Gerber file into an
@@ -69,7 +108,7 @@
 
     <button disabled type="botton">View <code>scad</code></button>
     <button disabled type="botton">Download <code>scad</code></button>
-    
+
   </section>
 </body>
 
