@@ -36,7 +36,8 @@ window.addEventListener("load", () => {
       const layersToRender = layers.filter(l => l.layerType !== LAYER_TYPE.IGNORED);
       const text = await exportToScad(layersToRender);
 
-      alert(text);
+      const out = document.getElementById("scad-out") as HTMLTextAreaElement;
+      out.value = text;
     });
 
     reader.addEventListener('error', function () {
