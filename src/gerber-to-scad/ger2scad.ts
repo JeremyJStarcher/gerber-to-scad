@@ -1,7 +1,25 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import  gerberParser from 'gerber-parser'
-import  gerberToSvg from 'gerber-to-svg';
-import  jszip from 'jszip';
+import gerberParser from 'gerber-parser'
+import gerberToSvg from 'gerber-to-svg';
+import whatsThatGerber from "whats-that-gerber";
+import {
+  // layer types
+  TYPE_COPPER, // 'copper'
+  TYPE_SOLDERMASK, // 'soldermask'
+  TYPE_SILKSCREEN, // 'silkscreen'
+  TYPE_SOLDERPASTE, // 'solderpaste'
+  TYPE_DRILL, // 'drill'
+  TYPE_OUTLINE, // 'outline'
+  TYPE_DRAWING, // 'drawing'
+
+  // board sides
+  SIDE_TOP, // 'top'
+  SIDE_BOTTOM, // 'bottom'
+  SIDE_INNER, // 'inner'
+  SIDE_ALL, // 'all'
+} from "whats-that-gerber";
+
+import jszip from 'jszip';
 
 import {
   Coord,
@@ -114,7 +132,7 @@ export async function unzipGerbers(
 
     resArray.push({
       content: lines,
-      layerType: identifyFileType(lines),
+      layerType: identifyFileType(file.name, lines),
       name: file.name
     });
   }
@@ -123,39 +141,27 @@ export async function unzipGerbers(
   return result;
 }
 
-function identifyFileType(content: readonly string[]): LAYER_TYPE {
-  /*
-arduino-isp-B_Cu.gbr:G04 #@! TF.FileFunction,Copper,L2,Bot*
-arduino-isp-B_Mask.gbr:G04 #@! TF.FileFunction,Soldermask,Bot*
-arduino-isp-B_SilkS.gbr:G04 #@! TF.FileFunction,Legend,Bot*
-arduino-isp-Edge_Cuts.gbr:G04 #@! TF.FileFunction,Profile,NP*
-arduino-isp-F_Cu.gbr:G04 #@! TF.FileFunction,Copper,L1,Top*
-arduino-isp-F_Mask.gbr:G04 #@! TF.FileFunction,Soldermask,Top*
-arduino-isp-F_SilkS.gbr:G04 #@! TF.FileFunction,Legend,Top*
-arduino-isp-Margin.gbr:G04 #@! TF.FileFunction,Other,User*
-arduino-isp-NPTH.drl:; #@! TF.FileFunction,NonPlated,1,2,NPTH
-arduino-isp-PTH.drl:; #@! TF.FileFunction,Plated,1,2,PTH
-*/
+function identifyFileType(filename: string, content: readonly string[]): LAYER_TYPE {
+  const gerberIdObj = whatsThatGerber([filename]);
+  const gerberType = gerberIdObj[filename];
 
-  const markers = {
-    ',Copper,L1': LAYER_TYPE.COPPER_TOP,
-    ',Copper,L2': LAYER_TYPE.COPPER_BOTTOM,
-    ',NonPlated,': LAYER_TYPE.DRILL_HOLES,
-    ',Plated,': LAYER_TYPE.DRILL_HOLES,
-    ',Profile,': LAYER_TYPE.PROFILE
-  };
-
-  for (const line of content) {
-    for (const marker of Object.keys(markers)) {
-      // tslint:disable-next-line:no-if-statement
-      if (
-        line.indexOf('TF.FileFunction') > -1 &&
-        line.lastIndexOf(marker) > -1
-      ) {
-        return markers[marker];
-      }
-    }
+  if (gerberType.type === TYPE_COPPER && gerberType.side === SIDE_TOP) {
+    return LAYER_TYPE.COPPER_TOP;
   }
+
+  if (gerberType.type === TYPE_COPPER && gerberType.side === SIDE_BOTTOM) {
+    return LAYER_TYPE.COPPER_BOTTOM;
+  }
+
+  if (gerberType.type === TYPE_DRILL) {
+    return LAYER_TYPE.COPPER_BOTTOM;
+  }
+
+
+  if (gerberType.type === TYPE_OUTLINE) {
+    return LAYER_TYPE.PROFILE;
+  }
+
   return LAYER_TYPE.IGNORED;
 }
 

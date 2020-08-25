@@ -84,6 +84,7 @@
   "dependencies": {
     "gerber-parser": "^4.2.1",
     "gerber-to-svg": "^4.2.1",
-    "jszip": "^3.5.0"
+    "jszip": "^3.5.0",
+    "whats-that-gerber": "^4.2.0"
   }
 }

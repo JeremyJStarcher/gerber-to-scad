@@ -16,7 +16,7 @@ async function  main() {
 
   const text = await exportToScad(layersToRender);
 
-  
+
   const outputFileName = `${TEST_FILE_DIR}/project.scad`;
   fs.writeFileSync(outputFileName, text);
   console.log(`Output file written to: ${outputFileName}`)
