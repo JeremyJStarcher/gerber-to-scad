@@ -27,7 +27,9 @@
       padding-right: 1em;
     }
 
-    a {
+    ;
+
+    s a {
       color: white;
     }
 
@@ -45,7 +47,7 @@
       /* For IE */
       height: 30px;
       border-style: solid;
-      border-color:  var(--main-text-color);
+      border-color: var(--main-text-color);
       border-width: 1px 0 0 0;
       border-radius: 20px;
     }
@@ -102,14 +104,35 @@
       the tool that I use.
     </p>
 
-    <input type="file" id="file-input" />
-    <button id="read-button">Upload ZIP file</button>
-    <hr>
 
-    <button disabled type="botton">View <code>scad</code></button>
-    <button disabled type="botton">Download <code>scad</code></button>
+    <fieldset>
+      <legend>Configuration Options</legend>
+      <div id="options-container"></div>
+    </fieldset>
 
-    <textarea style="height: 10ex; width: 80%" id="scad-out"></textarea>
+    <br>
+
+    <fieldset>
+      <legend>Actions (ZIP file)</legend>
+      <div class="container">
+        <div class="row">
+          <div class="col-12-sm col-6">
+            <input type="file" id="file-input" />
+          </div>
+
+          <div class="col-12-sm col-6">
+            <button id="read-button">Convert Gerbers</button>
+          </div>
+        </div>
+      </div>
+    </fieldset>
+
+    <div style="display: none">
+      <button disabled type="botton">View <code>scad</code></button>
+      <button disabled type="botton">Download <code>scad</code></button>
+
+      <textarea style="height: 10ex; width: 80%" id="scad-out"></textarea>
+    </div>
   </section>
 </body>
 
