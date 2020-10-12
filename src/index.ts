@@ -15,9 +15,13 @@ const displayConfig = () => {
   const configContainer = document.querySelector("#options-container") as HTMLDivElement;
   configContainer.classList.add('container');
 
-  Config.configOptions.forEach((opt, idx) => {
-    const labelId = `label-${idx}`;
-    const inputId = `input-${idx}`;
+  const names = Object.keys(Config.configOptions);
+
+  names.forEach((configName) => {
+    const opt = Config.configOptions[configName];
+
+    const labelId = `label-${configName}`;
+    const inputId = `input-${configName}`;
 
     const cont = document.createElement("div");
     cont.classList.add("row");
@@ -33,10 +37,16 @@ const displayConfig = () => {
         const input = document.createElement("input");
         input.type = "number";
         input.id = inputId;
+        input.dataset.name = configName;
         label.htmlFor = inputId;
         input.classList.add("col-5", "col-11-sm");
         input.value = opt.value.toString();
         cont.appendChild(input);
+
+        input.addEventListener("change", (event) => {
+          const target = event.currentTarget as HTMLInputElement;
+          opt.value = parseFloat(target.value);
+        });
         break;
       case Config.InputType.integer:
         break;
@@ -47,7 +57,6 @@ const displayConfig = () => {
       default:
         ((_: never): void => {})(opt);
     }
-
 
     configContainer.appendChild(cont);
   });
