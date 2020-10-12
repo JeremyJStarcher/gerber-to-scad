@@ -1,8 +1,6 @@
 import { MyLibrary } from './MyLibrary';
 import {exportToScad, unzipGerbers} from "./gerber-to-scad";
 import * as Config from "./config";
-const css = require('./components/simple-grid.css');
-console.log(css);
 
 console.log('See this in your browser console: Typescript Webpack Starter Launched');
 
