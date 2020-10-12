@@ -1,6 +1,7 @@
 import { MyLibrary } from './MyLibrary';
 import {exportToScad, unzipGerbers} from "./gerber-to-scad";
 import * as Config from "./config";
+require("./assets/simple-grid.css");
 
 console.log('See this in your browser console: Typescript Webpack Starter Launched');
 
@@ -88,6 +89,14 @@ window.addEventListener("load", () => {
       const layers =  await unzipGerbers(zipFile as ArrayBuffer);
 
       const text = await exportToScad(layers);
+
+      const blob = new Blob([text], {type: "text/plain;charset=utf-8"});
+
+      const j = document.createElement("a");
+      j.id = "download";
+      j.download = file.name + ".scad";
+      j.href = URL.createObjectURL(blob);
+      j.click();
 
       const out = document.getElementById("scad-out") as HTMLTextAreaElement;
       out.value = text;

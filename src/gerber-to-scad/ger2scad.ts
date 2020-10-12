@@ -2,6 +2,8 @@
 import gerberParser from 'gerber-parser'
 import gerberToSvg from 'gerber-to-svg';
 import whatsThatGerber from "whats-that-gerber";
+import * as Config from "../config";
+
 import {
   GerberProps,
 
@@ -199,7 +201,10 @@ export async function convertGerberToSvg(
 }
 
 export async function exportToScad(layers: readonly GerberContainer[]): Promise<string> {
-  const header = ['BT = 1.6;', '$fs = 0.5;'];
+  const header = [
+    `BT = ${Config.configOptions.minHoleDiameter};`,
+    '$fs = 0.5;'
+  ];
 
   // tslint:disable-next-line
   let text: string[] = [];

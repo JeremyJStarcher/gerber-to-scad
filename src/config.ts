@@ -38,7 +38,8 @@ ConfigOptionOptions |
 ConfigOptionString;
 
 interface ConfigOptionTypes {
-  [key: string]: ConfigOptionType
+  minHoleDiameter: ConfigOptionType;
+  [key: string]: ConfigOptionType;
 }
 
 export const configOptions: ConfigOptionTypes = {
