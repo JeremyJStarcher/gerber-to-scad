@@ -202,7 +202,7 @@ export async function convertGerberToSvg(
 
 export async function exportToScad(layers: readonly GerberContainer[]): Promise<string> {
   const header = [
-    `BT = ${Config.configOptions.minHoleDiameter};`,
+    `BT = ${Config.configOptions.boardThickness.value};`,
     '$fs = 0.5;'
   ];
 

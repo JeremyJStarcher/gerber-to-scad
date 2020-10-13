@@ -38,6 +38,8 @@ ConfigOptionOptions |
 ConfigOptionString;
 
 interface ConfigOptionTypes {
+  copperThickness: ConfigOptionType;
+  boardThickness: ConfigOptionType;
   minHoleDiameter: ConfigOptionType;
   [key: string]: ConfigOptionType;
 }
